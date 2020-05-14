@@ -3,42 +3,42 @@ using System.Threading;
 
 namespace ThreadingSample
 {
-    class Program
+    class SimpleThreading
     {
         static void Main(string[] args)
         {
-            DataLoader loader = new DataLoader();
-            NetworkTransfer transfer = new NetworkTransfer();
-            Thread l = new Thread(loader.LoadData);
-            Thread t = new Thread(transfer.TransferData);
-            l.Start();
-            t.Start();
+            //doSimpleThreading();
+            //CounterDemo.Demo();
+            //DeadlockDemo.Demo();
+            //ProducerConsumerDemo.Demo();
+        }
+
+        private static void doSimpleThreading()
+        {
+            FileUploader uploader1 = new FileUploader(1);
+            FileUploader uploader2 = new FileUploader(2);
+            Thread uploadThread1 = new Thread(uploader1.uploadFile);
+            Thread uploadThread2 = new Thread(uploader2.uploadFile);
+            uploadThread1.Start();
+            uploadThread2.Start();
         }
     }
 
-    class DataLoader
+    class FileUploader
     {
-        public void LoadData()
+        private int _timeout;
+        public FileUploader(int timeout)
         {
-            for (int i = 0; i < 100; i++)
-            {
-                Console.WriteLine("Loading data: {0}%", i);
-                Thread.Sleep(100);
-            }
-            Console.WriteLine("Loading data: Finished");
+            _timeout = timeout;
         }
-    }
 
-    class NetworkTransfer
-    {
-        public void TransferData()
+        public void uploadFile()
         {
             for (int i = 0; i < 100; i++)
             {
-                Console.WriteLine("Transferring data: {0}%", i);
-                Thread.Sleep(100);
+                Console.WriteLine("Uploading file with timeout {1}: {0}", i, _timeout);
+                Thread.Sleep(_timeout);
             }
-            Console.WriteLine("Transferring data: Finished");
         }
     }
     
